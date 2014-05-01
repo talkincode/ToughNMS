@@ -207,6 +207,8 @@ form .footbotron {
 
 }
 
+
+
 .opt-btn:hover{
     text-decoration: none;
     background-color: rgba(164, 202, 187, 0.18);
@@ -227,9 +229,21 @@ form .footbotron {
     margin-top: 10px;
 }
 
+.list-group-item-text{
+   padding: 5px 0 5px 5px;
+}
+
+.input-help{
+    margin-top: 5px;
+    font-size: 18px;
+    color: #0b95cb;
+}
+
 
 .status_header{
     background-color: #f2f2f2;
+    font-size: 13px;
+    color: #8b8b8b;
 }
 .status_ok{
     background-color: #ccffcc;

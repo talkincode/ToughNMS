@@ -6,6 +6,7 @@ from forms import service_form
 from lib import rutils
 from settings import config
 from lib.nagutils import nagapi
+from lib.cmdhelp import help_dict
 
 
 @base.route('/manage/service')
@@ -25,13 +26,19 @@ class serviceAddHandler(base.BaseHandler):
         host_name = self.get_argument("host_name",None)
         form = service_form.service_add_form()
         form.host_name.set_value(host_name)
-        self.render_form(form=form)
+        self.render("service_form.html",
+            form=form,
+            commands=nagapi.list_commands(),
+            help_dict=help_dict)
 
     @base.authenticated
     def post(self,**kwargs):
         form = service_form.service_add_form()
         if not form.validates(source=self.get_params()):
-            self.render_form(form=form)
+            self.render("service_form.html",
+                form=form,
+                commands=nagapi.list_commands(),
+                help_dict=help_dict)
             return
 
         ret = nagapi.add_service(
@@ -62,13 +69,19 @@ class serviceUpdateHandler(base.BaseHandler):
         form.service_id.set_value(sid)
         form.use.set_value(service.use)
         form.notifications_enabled.set_value(service.notifications_enabled)
-        self.render_form(form=form)
+        self.render("service_form.html",
+            form=form,
+            commands=nagapi.list_commands(),
+            help_dict=help_dict)
 
     @base.authenticated
     def post(self,**kwargs):
         form = service_form.service_update_form()
         if not form.validates(source=self.get_params()):
-            self.render_form(form=form)
+            self.render("service_form.html",
+                form=form,
+                commands=nagapi.list_commands(),
+                help_dict=help_dict)
             return
 
         ret = nagapi.update_service(
