@@ -1,0 +1,65 @@
+<%inherit file="base.html"/>
+<%def name="head()">
+<script>
+
+    function execute_cmd(exec)
+    {
+        params = {exec:exec,_xsrf: '${handler.xsrf_token}'};
+        $.post("/manage/nagios/ctl", params, function (data) {
+            msg = '<div class="alert alert-info">执行结果: ' + data.msg + '</div>'
+            $("#inbox").html(msg.replace(/\n/g,"<br>"));
+        },"json");
+    }
+
+    $(document).ready(function () {
+        $(".exec").click(function(i){
+            cmdid = this.id;
+            if(cmdid=="stop"){
+                if (!confirm("确认停止Nagios进程吗？")) {
+                    return false;
+                }
+            }
+            if(cmdid=="restart"){
+                if (!confirm("确认重启Nagios进程吗？")) {
+                    return false;
+                }
+            }            
+            execute_cmd(this.id);
+        });
+    });
+
+</script>
+</%def>
+<%def name="body()">
+    <div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> Nagios控制 </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td>刷新配置文件</td>
+                        <td><button id="reload" type="button" class="btn btn-sm btn-default exec">执行</button></td>
+                        <td>检测配置文件</td>
+                        <td><button id="verify" type="button" class="btn btn-sm btn-default exec">执行</button></td>
+                    </tr>
+                    <tr>
+                        <td>停止Nagios进程</td>
+                        <td><button id="stop" type="button" class="btn btn-sm btn-default exec">执行</button></td>
+                        <td>启动Nagios进程</td>
+                        <td><button id="start" type="button" class="btn btn-sm btn-default exec">执行</button></td>
+                    </tr>    
+                    <tr>
+                        <td>重启Nagios进程</td>
+                        <td><button id="restart" type="button" class="btn btn-sm btn-default exec">执行</button></td>
+                        <td>当前Nagios状态</td>
+                        <td><button id="status" type="button" class="btn btn-sm btn-default exec">执行</button></td>
+                    </tr>                                       
+            </tbody>
+        </table>
+        <div id="inbox">
+
+        </div>        
+    </div>
+</div>
+</div>
+</%def>

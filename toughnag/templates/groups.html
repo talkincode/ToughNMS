@@ -1,0 +1,46 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+<script>
+    function deleteGroup(group_name) {
+        if (confirm("确认删除吗？")) {
+            window.location.href = "/manage/group/delete?group_name=" + group_name;
+        }
+    }
+</script>
+</%def>
+<%def name="body()">
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> 主机群组列表</div>
+    <div class="panel-body">
+        <div class="pull-right bottom10">
+            <a href="/manage/group/add" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-plus"></span> 添加群组
+            </a>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>群组名称</th>
+                <th>群组描述</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            % for group in groups:
+            <tr>
+                <td>${group.hostgroup_name}</td>
+                <td>${group.alias}</td>
+                <td>
+                    <a class="opt-btn btn-default" href="/manage/group/update?group_name=${group.hostgroup_name}">修改</a>
+                    <a class="opt-btn btn-default" href="javascript:deleteGroup('${group.hostgroup_name}')">删除</a>
+                </td>
+            </tr>
+
+            % endfor
+            </tbody>
+        </table>
+
+    </div>
+</div>
+</%def>

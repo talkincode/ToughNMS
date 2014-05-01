@@ -1,0 +1,53 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+<script>
+    function deleteHost(host_name) {
+        if (confirm("确认删除吗？")) {
+            window.location.href = "/manage/host/delete?host_name=" + host_name;
+        }
+    }
+</script>
+</%def>
+<%def name="body()">
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> 主机状态列表</div>
+    <div class="panel-body">
+
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>服务名</th>
+                <th>状态</th>
+                <th>最后检测</th>
+                <th>尝试次数</th>
+                <th>状态信息</th>
+            </tr>
+            </thead>
+            <tbody>
+             % for host in hosts:
+            <thead>
+            <tr>
+                <th colspan=5 class="status_header">${host.host_name} - ${host.alias}</th>
+            </tr>
+            </thead>             
+             % for service in host.get_effective_services():
+             <% 
+                 curr_status =  service.get_current_status()
+             %>
+            <tr >
+                <td>${service.get_shortname()}</td>
+                <td class="${STYLE[int(curr_status['current_state'])]}">${STATUS[int(curr_status['current_state'])]}</td>
+                <td>${utils.get_datetime(float(curr_status['last_check']))}</td>
+                <td>${curr_status['current_attempt']}/${curr_status['max_attempts']}</td>
+                <td>${curr_status['plugin_output']}</td>
+            </tr>
+            % endfor
+            % endfor
+            </tbody>
+        </table>
+        
+        
+    </div>
+</div>
+</%def>
