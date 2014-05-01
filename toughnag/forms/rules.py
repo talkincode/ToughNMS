@@ -27,6 +27,7 @@ is_time = pyforms.regexp('(\d{4})-(\d{2}-(\d\d))\s([01][0-9]|2[0-3]):[0-5][0-9]:
 is_time_hm = pyforms.regexp('^([01][0-9]|2[0-3]):[0-5][0-9]$', u"时间格式: hh:mm")
 input_style = {"class": "form-control"}
 button_style = {"class": "btn btn-primary"}
+button_style_block = {"class": "btn btn-block"}
 
 
 
