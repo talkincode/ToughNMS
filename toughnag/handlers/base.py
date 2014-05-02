@@ -42,7 +42,6 @@ def authenticated(method):
             try:
                 return method(self, *args, **kwargs)
             except Exception,e:
-                self.db.rollback()
                 self.logging.exception("server process error")
                 if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest': # jQuery 等库会附带这个头
                     self.set_header('Content-Type', 'application/json; charset=UTF-8')
@@ -69,12 +68,6 @@ class BaseHandler(tornado.web.RequestHandler):
         super(BaseHandler, self).__init__(*argc, **argkw)
         self.logging = self.application.logging
         self.cache_key = "BaseHandler"
-
-    def initialize(self):
-        self.db = self.application.db()
-
-    def on_finish(self):
-        self.db.close()
 
     def get_error_html(self, status_code=500, **kwargs):
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':

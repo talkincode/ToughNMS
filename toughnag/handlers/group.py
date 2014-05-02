@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #coding=utf-8
 import base
-from db_models import OmsHostGroup
+
 from forms import group_form
 from lib import rutils
 from lib.nagutils import nagapi

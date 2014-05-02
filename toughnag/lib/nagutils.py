@@ -2,7 +2,9 @@
 #coding=utf-8
 
 from settings import config
-from pynag import Model,Control
+from pynag import Model
+from pynag import Control
+from pynag import Parsers
 from rutils import log
 import functools
 
@@ -47,6 +49,14 @@ class NagiosApi:
             nagios_init = "service {0}".format(self.nagios_service),
             service_name = self.nagios_service
         )
+
+    def get_stats_data(self):
+        try:
+            stat = Parsers.StatusDat()
+            stat.parse()
+            return stat['programstatus'][0]
+        except:
+            return None
 
     #--------------------hostgroup-----------------------------#
 
@@ -105,6 +115,10 @@ class NagiosApi:
 
 
     def list_host(self,group_name=None):
+        if group_name:
+            group = self.get_hostgroup(group_name)
+            if group:
+                return group.get_effective_hosts()
         all_hosts = Model.Host.objects.all
         all_hosts = (host for host in all_hosts if host.host_name)        
         return all_hosts

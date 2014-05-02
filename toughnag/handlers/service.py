@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #coding=utf-8
 import base
-from db_models import OmsHost,OmsHostGroup
 from forms import service_form
 from lib import rutils
 from settings import config
@@ -69,6 +68,7 @@ class serviceUpdateHandler(base.BaseHandler):
         form.service_id.set_value(sid)
         form.use.set_value(service.use)
         form.notifications_enabled.set_value(service.notifications_enabled)
+        form.process_perf_data.set_value(service.process_perf_data)
         self.render("service_form.html",
             form=form,
             commands=nagapi.list_commands(),
