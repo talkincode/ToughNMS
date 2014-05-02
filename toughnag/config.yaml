@@ -1,8 +1,6 @@
 admin_name: admin
 admin_pwd: 3040434A4556
 cookie_secret: htFuvC9FTDanupmQdFFgMYWghPlFaEzZjLMfxtMtUkg
-db_echo: true
-db_pool: 50
 db_url: sqlite:///database.sqlite3
 debug: true
 host_file: hosts

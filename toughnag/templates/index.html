@@ -5,7 +5,7 @@
     <div class="panel panel-default">
     <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> 系统信息 </div>
         <div class="panel-body">
-            <table class="table table-hover">
+        <table class="table table-hover">
                 <thead>
                     <tr>
                         <th colspan="4"> 当前已登录管理员  </th>
@@ -20,12 +20,37 @@
                     </tr>
                     <tr>
                         <td>登录IP地址</td>
-                        <td></td>
+                        <td>${handler.request.remote_ip}</td>
                         <td></td>
                         <td></td>
                     </tr>
             </tbody>
         </table>
+        % if statsdata:
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="4"> Nagios 信息  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>启动时间</td>
+                        <td>${utils.get_datetime(int(statsdata['program_start']))}</td>
+
+                        <td>最后检测时间</td>
+                        <td>${utils.get_datetime(int(statsdata['last_command_check']))}</td>                        
+                    </tr>                
+                    <tr>
+                        <td>Nagios进程ID</td>
+                        <td>${statsdata['nagios_pid']}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+            </tbody>
+        </table>      
+        % endif  
     </div>
 </div>
 </div>

@@ -8,13 +8,10 @@ from tornado.options import options
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 from mako.lookup import TemplateLookup
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import create_engine
 from handlers.base import BaseHandler
 from handlers.base import PageNotFoundHandler
 from lib import rutils
 from settings import config
-import db_models
 
 
 class Application(web.Application):
@@ -24,14 +21,6 @@ class Application(web.Application):
 
     def __init__(self):
         super(Application, self).__init__(self.app_urls, **config)
-
-        db_models.engine = create_engine(config['db_url'],echo=config['db_echo'],convert_unicode=True)
-
-        self.db = scoped_session(sessionmaker(
-            bind=db_models.engine,
-            autocommit=False,
-            autoflush=False
-        ))
 
 
         self.cache = CacheManager(**parse_cache_config_options({

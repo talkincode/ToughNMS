@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #coding=utf-8
 import base
-from db_models import OmsHost,OmsHostGroup
 from forms import host_form
 from lib import rutils
 from settings import config

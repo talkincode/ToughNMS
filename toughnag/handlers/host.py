@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #coding=utf-8
 import base
-from db_models import OmsHost,OmsHostGroup
 from forms import host_form
 from lib import rutils
 from settings import config
@@ -12,9 +11,18 @@ class HostHandler(base.BaseHandler):
 
     @base.authenticated
     def get(self, template_variables={}):
+        self.post()
+
+    @base.authenticated
+    def post(self,**kwargs):
         group_name = self.get_argument("group_name",None)
         all_hosts = nagapi.list_host(group_name)
-        self.render('hosts.html',hosts=all_hosts)     
+        groups = nagapi.list_hostgroup()
+        self.render('hosts.html',
+            curr_group=group_name,
+            hosts=all_hosts,
+            groups=groups
+        )     
 
 @base.route('/manage/host/add')
 class HostAddHandler(base.BaseHandler):

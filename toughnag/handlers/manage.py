@@ -4,13 +4,15 @@ import base
 import settings
 from base import authenticated
 from lib import rutils
+from lib.nagutils import nagapi
 
 @base.route('/manage')
 class IndexHandler(base.BaseHandler):
 
     @authenticated
     def get(self, template_variables={}):
-        self.render('index.html')
+        statsdata = nagapi.get_stats_data()
+        self.render('index.html',statsdata=statsdata)
 
 @base.route('/manage/login')
 class LoginHandler(base.BaseHandler):
