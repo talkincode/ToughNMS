@@ -52,4 +52,4 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 documents/build
-
+sftp-config.json
