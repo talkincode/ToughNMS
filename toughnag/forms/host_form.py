@@ -19,7 +19,7 @@ def host_add_form(groups=[]):
         pyforms.Textbox("address", rules.len_of(1, 128), description=u"主机地址",required="required",**input_style),
         pyforms.Button("submit", type="submit", html=u"<b>提交</b>", **button_style),
         title=u"主机增加",
-        action="/manage/host/update"
+        action="/manage/host/add"
 
     )()
 
