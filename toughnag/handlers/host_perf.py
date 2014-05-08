@@ -6,6 +6,8 @@ from lib import rutils
 from settings import config
 from lib import router
 
+empty = {}
+
 @router.route('/manage/perfdata')
 class HostHandler(base.BaseHandler):
 
@@ -17,12 +19,15 @@ class HostHandler(base.BaseHandler):
         diskdata = self.mongodb.query_disk_perfdata(host_name)
 
         _disk_usage = { int(d['lastcheck'])*1000:str(d['data']['usage']) for d in diskdata}
+        _swap_usage = { int(d['lastcheck'])*1000:str(d['data']['usage']) for d in swapdata}
+        _load_perf = { int(d['lastcheck'])*1000:d['data'] for d in loaddata }
 
+        print _disk_usage
         self.render("host_perf.html",
             host_name=host_name,
-            loaddata=loaddata,
-            swapdata=swapdata,
-            disk_usage=_disk_usage
+            load_perf=_load_perf,
+            swap_usage=_swap_usage,
+            disk_usage=_disk_usage 
         )
         
 
