@@ -41,23 +41,6 @@ class Application(web.Application):
         self.logging = rutils.getLogger("server", "./server.log",debug=options.debug)
 
 
-    def load_module(self, modules, **options):
-        for module in modules:
-            assert isinstance(module,types.ModuleType)
-            host_pattern = options.get('host_pattern', '.*$')
-
-            # 处理加载 RequestHandler 和路由规则
-            cls_valid = lambda cls: type(cls) is types.TypeType \
-                     and (issubclass(cls, BaseHandler)
-                     or issubclass(cls,WebSocketHandler))  # 是否有效
-
-            url_valid = lambda cls: hasattr(cls, 'url_pattern') and cls.url_pattern  # 是否拥有 url 规则
-            mod_attrs = (getattr(module, i) for i in dir(module) if not i.startswith('_'))
-            valid_handlers = [(i.url_pattern, i) for i in mod_attrs if cls_valid(i) and url_valid(i)]
-
-            # 处理完毕载入
-            self.add_handlers(host_pattern, valid_handlers)
-            self.logging.info(valid_handlers)
 
     def _get_host_handlers(self, request):
         host = request.host.lower().split(':')[0]

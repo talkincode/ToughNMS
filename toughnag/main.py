@@ -15,7 +15,7 @@ from tornado.httpserver import HTTPServer
 from tornado.options import parse_command_line
 from tornado.options import options, define
 from application import Application
-
+from lib import router
 
 define('appdir', type=str, default=os.path.abspath(os.path.dirname(__file__)))
 define('debug', type=bool, default=True)
@@ -33,20 +33,9 @@ def main():
     else:
         logging.info('Starting server at port %s' % options.port)
 
-    hds = set(os.path.splitext(it)[0] for it in os.listdir('./handlers'))
-    hds = [it for it in hds if it not in ('__init__', 'base','.svn','.DS_Store')]
-    hdmodules = []
-    for hd in hds:
-        try:
-            _hd = 'handlers.%s' % hd
-            logging.info('load_module %s'%_hd)
-            hdmodules.append(importlib.import_module(_hd))
-        except:
-            logging.exception("load_module error ")
-            continue
-
     app = Application()
-    app.load_module(hdmodules)
+    handler_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),"handlers")
+    router.load_handlers(app, handler_path=handler_path, pkg_prefix="handlers")
 
     server = HTTPServer(app, xheaders=True)
     server.listen(int(options.port), '0.0.0.0')

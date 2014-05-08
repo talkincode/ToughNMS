@@ -5,7 +5,7 @@ from forms import host_form
 from lib import rutils
 from settings import config
 from lib.nagutils import nagapi
-
+from lib import router
 
 CMDS = {
     'status': nagapi.status_nagios,
@@ -17,7 +17,7 @@ CMDS = {
     'verify': nagapi.verify_config
 }
 
-@base.route('/manage/nagios/ctl')
+@router.route('/manage/nagios/ctl')
 class HostHandler(base.BaseHandler):
     @base.authenticated
     def get(self, template_variables={}):

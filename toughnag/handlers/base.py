@@ -52,15 +52,6 @@ def authenticated(method):
 
 
 
-
-def route(url_pattern):
-    def handler_wapper(cls):
-        assert (issubclass(cls, BaseHandler) or issubclass(cls, WebSocketHandler))
-        cls.url_pattern = url_pattern
-        return cls
-    return handler_wapper
-
-
 class BaseHandler(tornado.web.RequestHandler):
     url_pattern = None
 

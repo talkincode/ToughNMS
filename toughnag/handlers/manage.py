@@ -5,8 +5,9 @@ import settings
 from base import authenticated
 from lib import rutils
 from lib.nagutils import nagapi
+from lib import router
 
-@base.route('/manage')
+@router.route('/manage')
 class IndexHandler(base.BaseHandler):
 
     @authenticated
@@ -14,7 +15,7 @@ class IndexHandler(base.BaseHandler):
         statsdata = nagapi.get_stats_data()
         self.render('index.html',statsdata=statsdata)
 
-@base.route('/manage/login')
+@router.route('/manage/login')
 class LoginHandler(base.BaseHandler):
 
     def get(self, template_variables={}):
@@ -35,7 +36,7 @@ class LoginHandler(base.BaseHandler):
             else:
                 self.render_json(code=1, msg=u"登录失败，用户密码不符合")
 
-@base.route('/manage/logout')
+@router.route('/manage/logout')
 class LogoutHandler(base.BaseHandler):
 
     def get(self, template_variables={}):

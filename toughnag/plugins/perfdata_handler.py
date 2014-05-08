@@ -74,7 +74,7 @@ parse_funcs = {
 }
 
 def process_data(options):
-    _pref_cmd = [p for p in parse_funcs.keys() if options.command.startswith(p)]
+    _pref_cmd = [p for p in parse_funcs.keys() if p in options.command]
     if not _pref_cmd:
         log.debug("perfdata_command do nothing of %s"%options.command)
         return 

@@ -5,8 +5,9 @@ from forms import host_form
 from lib import rutils
 from settings import config
 from lib.nagutils import nagapi
+from lib import router
 
-@base.route('/manage/host')
+@router.route('/manage/host')
 class HostHandler(base.BaseHandler):
 
     @base.authenticated
@@ -24,7 +25,7 @@ class HostHandler(base.BaseHandler):
             groups=groups
         )     
 
-@base.route('/manage/host/add')
+@router.route('/manage/host/add')
 class HostAddHandler(base.BaseHandler):
 
     @base.authenticated
@@ -57,7 +58,7 @@ class HostAddHandler(base.BaseHandler):
             self.redirect('/manage/host', permanent=False) 
 
 
-@base.route('/manage/host/update')
+@router.route('/manage/host/update')
 class HostUpdateHandler(base.BaseHandler):
 
     @base.authenticated
@@ -96,7 +97,7 @@ class HostUpdateHandler(base.BaseHandler):
         else: 
             self.redirect('/manage/host', permanent=False)   
 
-@base.route('/manage/host/delete')
+@router.route('/manage/host/delete')
 class HostDeleteHandler(base.BaseHandler):
 
     @base.authenticated
