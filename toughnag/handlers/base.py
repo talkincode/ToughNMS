@@ -67,7 +67,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def __init__(self, *argc, **argkw):
         super(BaseHandler, self).__init__(*argc, **argkw)
         self.logging = self.application.logging
-        self.cache_key = "BaseHandler"
+        self.mongodb = self.application.mongodb
 
     def get_error_html(self, status_code=500, **kwargs):
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':

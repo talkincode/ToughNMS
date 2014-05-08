@@ -11,6 +11,7 @@ from mako.lookup import TemplateLookup
 from handlers.base import BaseHandler
 from handlers.base import PageNotFoundHandler
 from lib import rutils
+from lib.mongutils import mongodb
 from settings import config
 
 
@@ -22,6 +23,7 @@ class Application(web.Application):
     def __init__(self):
         super(Application, self).__init__(self.app_urls, **config)
 
+        self.mongodb = mongodb
 
         self.cache = CacheManager(**parse_cache_config_options({
             'cache.type': 'file',

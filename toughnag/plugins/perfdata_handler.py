@@ -85,7 +85,7 @@ def process_data(options):
         lastcheck = options.lastcheck,
         host = options.host,
         service = options.service,
-        command = options.command,
+        command = _cmd,
         data = parse_funcs[_cmd](options.data)
     )
     log.debug("perfdata_command insert to db %s"%repr(data))
