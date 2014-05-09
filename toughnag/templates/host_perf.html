@@ -1,0 +1,81 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+<script src="/static/js/highcharts.js" type="text/javascript"></script>
+<script src="/static/js/charttheme.js" type="text/javascript"></script>
+<script>
+$(function () {
+    Highcharts.setOptions({ global: { useUTC: false } });   
+    $('#disk-chart').highcharts({
+        credits : {enabled:false},
+        chart: {type: 'area'},
+        title: {text: '${host_name} - 磁盘用量'},
+        subtitle: {text: ''},
+        xAxis: {type: 'datetime',tickInterval : 3600*1000},
+        yAxis: {max: 100,min: 0,title: {text: '百分比'},
+            labels: {formatter: function() {return this.value +'%';}}         
+        },
+        tooltip: {shared: true},
+        legend: {enabled: false},    
+        plotOptions: {area: {stacking: 'normal'}},        
+        series: [{
+                name: "usage",
+                data: [${','.join( '[%s,%s]'%(k,v) for k,v in disk_usage.items() )}]
+        }]
+    });
+
+    $('#swap-chart').highcharts({
+        credits : {enabled:false},
+        chart: {type: 'area'},
+        title: {text: '${host_name} - 交换分区使用量'},
+        subtitle: {text: ''},
+        xAxis: {type: 'datetime',tickInterval : 3600*1000},
+        yAxis: {max: 100,min: 0,title: {text: '百分比'},
+            labels: {formatter: function() {return this.value +'%';}}            
+        },
+        tooltip: {shared: true},
+        legend: {enabled: false},    
+        plotOptions: {area: {stacking: 'normal'}},             
+        series: [{
+                name: "usage",
+                data: [${','.join( '[%s,%s]'%(k,v) for k,v in swap_usage.items() )}]
+        }]
+    });
+
+    $('#load-chart').highcharts({
+        chart: {type: 'area'},
+        title: {text: '${host_name} - 系统负载'},
+        legend: {enabled: true},  
+        xAxis: {type: 'datetime',tickInterval : 3600*1000},
+        yAxis: {title: {text: '系统负载'}},
+        tooltip: {shared: true},
+        credits: {enabled: false},
+        plotOptions: {area: {stacking: 'normal',}},     
+        series: [{
+            name: '1分钟负载',
+            data: [${','.join( '[%s,%s]'%(k,v['load1']) for k,v in load_perf.items() if v)}]
+        }, {
+            name: '5分钟负载',
+            data: [${','.join( '[%s,%s]'%(k,v['load5']) for k,v in load_perf.items() if v)}]
+        }, {
+            name: '15分钟负载',
+            data: [${','.join( '[%s,%s]'%(k,v['load15']) for k,v in load_perf.items() if v)}]
+        }]
+    });
+
+});
+
+</script>
+</%def>
+<%def name="body()">
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> 主机性能监控</div>
+    <div class="panel-body">
+
+        <div id="disk-chart" class="perf-chart"></div>   
+        <div id="swap-chart" class="perf-chart"></div>   
+        <div id="load-chart" class="perf-chart"></div>   
+        
+    </div>
+</div>
+</%def>

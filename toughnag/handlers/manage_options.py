@@ -5,9 +5,9 @@ import settings
 from base import authenticated
 from lib import rutils
 from forms.options_form import option_update_form,passwd_update_form
+from lib import router
 
-
-@base.route('/manage/option')
+@router.route('/manage/option')
 class OptionsHandler(base.BaseHandler):
 
     @authenticated
@@ -27,7 +27,7 @@ class OptionsHandler(base.BaseHandler):
         self.redirect('/manage', permanent=False)        
 
 
-@base.route('/manage/passwd')
+@router.route('/manage/passwd')
 class PasswdHandler(base.BaseHandler):
 
     @authenticated

@@ -47,7 +47,7 @@
              % for host in hosts:
             <thead>
             <tr>
-                <th colspan=5 class="status_header"><span class="glyphicon glyphicon-cog"></span> ${host.host_name} - ${host.alias}</th>
+                <th colspan=5 class="status_header"><span class="glyphicon glyphicon-cog"></span> ${host.host_name} - ${host.alias} (<a href="/manage/perfdata?host_name=${host.host_name}">性能监控</a>)</th>
             </tr>
             </thead>             
              % for service in host.get_effective_services():

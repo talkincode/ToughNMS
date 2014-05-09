@@ -52,22 +52,13 @@ def authenticated(method):
 
 
 
-
-def route(url_pattern):
-    def handler_wapper(cls):
-        assert (issubclass(cls, BaseHandler) or issubclass(cls, WebSocketHandler))
-        cls.url_pattern = url_pattern
-        return cls
-    return handler_wapper
-
-
 class BaseHandler(tornado.web.RequestHandler):
     url_pattern = None
 
     def __init__(self, *argc, **argkw):
         super(BaseHandler, self).__init__(*argc, **argkw)
         self.logging = self.application.logging
-        self.cache_key = "BaseHandler"
+        self.mongodb = self.application.mongodb
 
     def get_error_html(self, status_code=500, **kwargs):
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':

@@ -5,8 +5,9 @@ import base
 from forms import group_form
 from lib import rutils
 from lib.nagutils import nagapi
+from lib import router
 
-@base.route('/manage/group')
+@router.route('/manage/group')
 class GroupHandler(base.BaseHandler):
 
     @base.authenticated
@@ -15,7 +16,7 @@ class GroupHandler(base.BaseHandler):
         self.render('groups.html',groups=all_grps)        
 
 
-@base.route('/manage/group/add')
+@router.route('/manage/group/add')
 class GroupAddHandler(base.BaseHandler):
 
     @base.authenticated
@@ -36,7 +37,7 @@ class GroupAddHandler(base.BaseHandler):
             self.redirect('/manage/group', permanent=False) 
 
 
-@base.route('/manage/group/update')
+@router.route('/manage/group/update')
 class GroupUpdateHandler(base.BaseHandler):
 
     @base.authenticated
@@ -65,7 +66,7 @@ class GroupUpdateHandler(base.BaseHandler):
         else:            
             self.redirect('/manage/group', permanent=False)         
 
-@base.route('/manage/group/delete')
+@router.route('/manage/group/delete')
 class GroupDeleteHandler(base.BaseHandler):
 
     @base.authenticated

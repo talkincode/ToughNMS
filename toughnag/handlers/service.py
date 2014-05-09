@@ -6,9 +6,9 @@ from lib import rutils
 from settings import config
 from lib.nagutils import nagapi
 from lib.cmdhelp import help_dict
+from lib import router
 
-
-@base.route('/manage/service')
+@router.route('/manage/service')
 class ServiceHandler(base.BaseHandler):
 
     @base.authenticated
@@ -17,7 +17,7 @@ class ServiceHandler(base.BaseHandler):
         services = nagapi.list_service(host_name)
         self.render('services.html',host_name=host_name,services=services)
 
-@base.route('/manage/service/add')
+@router.route('/manage/service/add')
 class serviceAddHandler(base.BaseHandler):
 
     @base.authenticated
@@ -54,7 +54,7 @@ class serviceAddHandler(base.BaseHandler):
             self.redirect('/manage/service?host_name='+form.d.host_name, permanent=False)   
 
 
-@base.route('/manage/service/update')
+@router.route('/manage/service/update')
 class serviceUpdateHandler(base.BaseHandler):
 
     @base.authenticated
@@ -98,7 +98,7 @@ class serviceUpdateHandler(base.BaseHandler):
             self.redirect('/manage/service?host_name='+form.d.host_name, permanent=False)   
 
 
-@base.route('/manage/service/delete')
+@router.route('/manage/service/delete')
 class ServiceDeleteHandler(base.BaseHandler):
 
     @base.authenticated
