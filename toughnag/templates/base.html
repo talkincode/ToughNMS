@@ -69,16 +69,39 @@
                         <div class="accordion" id="accordion2">
                             <div class="accordion-group">
                                 <div class="accordion-heading left-header">
-                                <span class="glyphicon glyphicon-play-circle"></span> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">监控管理</a>
+                                <span class="glyphicon glyphicon-play-circle"></span> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">主机状态监控</a>
                             </div>
                                 <div id="collapseTwo" class="accordion-body collapse in">
                                     <div class="accordion-inner">
-                                    <li><a href="/manage/status/hosts">主机状态监控</a></li>
+                                    % for group in groups:
+                                      <li><a href="/manage/status/hosts?group_name=${group.hostgroup_name}">${group.alias}</a></li>
+                                    % endfor  
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
+           
+
+                    % for group in groups:
+                        <div class="accordion" id="accordion-${group.hostgroup_name}">
+                            <div class="accordion-group">
+                                <div class="accordion-heading left-header">
+                                <span class="glyphicon glyphicon glyphicon-stats"></span> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-${group.hostgroup_name}" href="#collapse-${group.hostgroup_name}">${group.alias}</a>
+                            </div>
+                                <div id="collapse-${group.hostgroup_name}" class="accordion-body collapse in">
+                                    <div class="accordion-inner">
+                                    % for host in group.get_effective_hosts():
+                                    <li><a href="/manage/perfdata?group_name=${group.hostgroup_name}&host_name=${host.host_name}">${host.alias}</a></li>
+                                    % endfor
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+
+                    % endfor
+
+
+                </div>
                
                 <div class="col-md-10 main-box">
                     ${self.body()}

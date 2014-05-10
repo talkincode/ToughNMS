@@ -13,6 +13,7 @@ from tornado.websocket import WebSocketHandler
 from lib.paginator import Paginator
 from tornado.httpclient import AsyncHTTPClient
 from lib import rutils
+from lib.nagutils import nagapi
 import settings
 
 def authenticated(method):
@@ -101,6 +102,7 @@ class BaseHandler(tornado.web.RequestHandler):
         template_vars["handler"] = self
         template_vars["utils"] = rutils
         template_vars["system_name"] = settings.config["system_name"]
+        template_vars["groups"] = [g for g in nagapi.list_hostgroup()]
         mytemplate = self.application.tp_lookup.get_template(template_name)
         return mytemplate.render(**template_vars)
 

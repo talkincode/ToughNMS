@@ -82,7 +82,7 @@ def process_data(options):
     db = mdb['nagios_perfdata']
     coll = db[str(options.host)]
     data = dict(
-        lastcheck = options.lastcheck,
+        lastcheck = int(options.lastcheck),
         host = options.host,
         service = options.service,
         command = _cmd,

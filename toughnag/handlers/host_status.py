@@ -4,11 +4,9 @@ import base
 from forms import host_form
 from lib import rutils
 from settings import config
-from lib.nagutils import nagapi
+from lib.nagutils import nagapi,STATUS,STYLE
 from lib import router
 
-STATUS = {0:u"正常",1:u"警告",2:u"严重",3:u"未知"}
-STYLE = {0:u"status_ok",1:u"status_warn",2:u"status_fail",3:u"status_unknow"}
 
 @router.route('/manage/status/hosts')
 class HostHandler(base.BaseHandler):

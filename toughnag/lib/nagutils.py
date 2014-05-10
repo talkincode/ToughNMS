@@ -12,6 +12,9 @@ import functools
 nagios api utils
 '''
 
+STATUS = {0:u"正常",1:u"警告",2:u"严重",3:u"未知"}
+STYLE = {0:u"status_ok",1:u"status_warn",2:u"status_fail",3:u"status_unknow"}
+
 def autoerror(method):
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
