@@ -6,3 +6,4 @@ backports.ssl-match-hostname==3.4.0.2
 pynag==0.8.9
 tornado==3.2
 wsgiref==0.1.2
+pymongo==2.6.3
