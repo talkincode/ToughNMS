@@ -57,7 +57,7 @@ class HostPerfSwapHandler(base.BaseHandler):
         begin_time = self.get_argument("begin_time") 
         end_time = self.get_argument("end_time") 
         swapdata = self.mongodb.query_swap_perfdata(host_name,begin_time,end_time)
-        _data = [ [int(d['lastcheck'])*1000,d['data']['usage']] for d in swapdata if d['data']]
+        _data = [ [d['lastcheck']*1000,d['data']['usage']] for d in swapdata if d['data']]
         self.render_json(data=[{"data":_data}])
 
 
@@ -69,7 +69,7 @@ class HostPerfDiskHandler(base.BaseHandler):
         begin_time = self.get_argument("begin_time") 
         end_time = self.get_argument("end_time") 
         diskdata = self.mongodb.query_disk_perfdata(host_name,begin_time,end_time)
-        _data = [ [int(d['lastcheck'])*1000,d['data']['usage']] for d in diskdata if d['data']]
+        _data = [ [d['lastcheck']*1000,d['data']['usage']] for d in diskdata if d['data']]
         self.render_json(data=[{"data":_data}])        
 
 @router.route('/manage/perfdata/load_perf')
@@ -86,9 +86,9 @@ class HostPerfLoadHandler(base.BaseHandler):
         load15 = {"name":u"15分钟负载","data":[]}
 
         for d in loaddata:
-            load1["data"].append(d['data']['load1'])
-            load5["data"].append(d['data']['load5'])
-            load15["data"].append(d['data']['load15'])
+            load1["data"].append([d['lastcheck']*1000,d['data']['load1']])
+            load5["data"].append([d['lastcheck']*1000,d['data']['load5']])
+            load15["data"].append([d['lastcheck']*1000,d['data']['load15']])
 
         self.render_json(data=[load1,load5,load15])
              

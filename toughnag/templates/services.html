@@ -11,7 +11,7 @@
 </%def>
 <%def name="body()">
 <div class="panel panel-default">
-    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> 【${host_name}】→ 服务列表</div>
+    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> 【${host_name}】→ 服务列表 <a class="badge pull-right" href="javascript:history.go(-1);">返回</a></div>
     <div class="panel-body">
         <div class="pull-right bottom10">
             <a href="/manage/service/add?host_name=${host_name}" class="btn btn-sm btn-default">
@@ -23,6 +23,7 @@
             <tr>
                 <th>服务类型</th>
                 <th>服务描述</th>
+                <th>服务指令</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -31,6 +32,7 @@
             <tr>
                 <td>${service.use}</td>
                 <td>${service.get_shortname()}</td>
+                <td>${service.check_command}</td>
                 <td>
                     <a class="opt-btn btn-default" href="/manage/service/update?service_id=${service.get_id()}">修改</a>
                     <a class="opt-btn btn-default" href="javascript:deleteService('${service.get_id()}')">删除</a>
