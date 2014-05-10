@@ -11,7 +11,7 @@
 // }, null, document.getElementsByTagName('head')[0]);
 // Add the background image to the container
 Highcharts.theme = {
-   colors: ["#7cb5ec", "#f7a35c", "#90ee7e", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+   colors: ["#7cb5ec", "#f7a35c", "#42e224", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
       "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
    chart: {
       backgroundColor: null,
