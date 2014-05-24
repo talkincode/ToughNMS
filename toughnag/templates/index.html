@@ -39,7 +39,7 @@
                         <td>${utils.get_datetime(int(statsdata['program_start']))}</td>
 
                         <td>最后检测时间</td>
-                        <td>${utils.get_datetime(int(statsdata['last_command_check']))}</td>                        
+                        <td>${utils.get_datetime(int(statsdata.get('last_command_check',0)))}</td>                        
                     </tr>                
                     <tr>
                         <td>Nagios进程ID</td>
