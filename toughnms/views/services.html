@@ -1,0 +1,57 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+<script>
+    function deleteService(service_id) {
+        if (confirm("确认删除吗？")) {
+            window.location.href = "/service/delete?host_name=${host_name}&service_id=" + service_id;
+        }
+    }
+</script>
+</%def>
+<%def name="body()">
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa fa-gavel"></i>
+            <h3 class="box-title">服务管理</h3>
+        </div>
+        <div class="box-body">
+            <div class="container">
+        <div class="pull-right bottom10">
+            <a href="/service/add?host_name=${host_name}" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-plus"></span> 添加服务
+            </a>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>服务类型</th>
+                <th>服务描述</th>
+                <th>服务指令</th>
+                <th>最大重试次数</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            % for service in services:
+            <tr>
+                <td>${service.use}</td>
+                <td>${service.get_shortname()}</td>
+                <td>${service.check_command}</td>
+                <td>${service.max_check_attempts}</td> 
+                <td>
+                    <a class="opt-btn btn-default" href="/service/update?service_id=${service.get_id()}">修改</a>
+                    <a class="opt-btn btn-default" href="javascript:deleteService('${service.get_id()}')">删除</a>
+                </td>
+            </tr>
+
+            % endfor
+            </tbody>
+        </table>
+
+            </div>
+        </div>
+    </div>
+</section>
+</%def>

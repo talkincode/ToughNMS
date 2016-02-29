@@ -1,0 +1,22 @@
+body {
+    /*background: #7c7f7a url(/static/img/bg1.jpg) repeat top;overflow: -moz-scrollbars-vertical;*/
+}
+
+.login-box-body{
+    border-radius: 9px;
+    -webkit-box-shadow: 3px 4px 3px rgba(174, 173, 173, 0.48);
+    box-shadow: 3px 4px 3px rgba(174, 173, 173, 0.48);
+}
+
+.login-box-msg {
+    margin: 0;
+    text-align: center;
+    padding: 0 20px 20px 20px;
+}
+
+
+.login-page, .register-page {
+    background: url(/static/img/bg1.jpg) repeat top;
+    /*background-color: #3c8dbc;*/
+}
+

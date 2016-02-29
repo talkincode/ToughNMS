@@ -1,0 +1,38 @@
+{
+    "admin": {
+        "host": "0.0.0.0", 
+        "port": 8099
+    }, 
+    "conf_file": "toughnms.json", 
+    "database": {
+        "backup_path": "/var/toughnms/data", 
+        "dbtype": "sqlite", 
+        "dburl": "sqlite:////var/toughnms/toughnms.sqlite3", 
+        "echo": 0, 
+        "pool_recycle": 300, 
+        "pool_size": 120,
+        "mongodb_url":"127.0.0.1",
+        "mongodb_port":27017
+    }, 
+    "syslog": {
+        "enable": 0, 
+        "level": "INFO", 
+        "port": 514, 
+        "server": "127.0.0.1", 
+        "shost": "toughnms_admin"
+    }, 
+    "system": {
+        "debug": 1, 
+        "secret": "0BOTrVO6WRtkRnKTmM52nKfQpvCGY8vD", 
+        "tz": "CST-8"
+    },
+    "nagios" : {
+        "host_file" : "hosts",
+        "nagios_bin" : "/usr/local/bin/nagios",
+        "nagios_cfg" : "/usr/local/etc/nagios/nagios.cfg",
+        "nagios_contact_cfg" : "/usr/local/etc/nagios/objects/contacts.cfg",
+        "nagios_host_cfg_dir" : "/usr/local/etc/nagios/servers",
+        "nagios_host_group_cfg" : "/usr/local/etc/nagios/objects/hostgroups.cfg",
+        "nagios_service" : "nagios"
+    }
+}

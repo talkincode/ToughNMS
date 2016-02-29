@@ -1,0 +1,19 @@
+<%inherit file="base.html"/>
+<%def name="head()">
+</%def>
+<%def name="body()">
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa  fa-info-circle"></i>
+            <h3 class="box-title">信息提示</h3>
+            <div class="bar pull-right"><a href="javascript:history.go(-1);">返回</a></div>
+        </div>
+        <div class="box-body">
+            % if msg:
+            <div class="alert alert-warning" role="alert">${msg}</div>
+            % endif
+        </div>
+    </div>
+</section>
+</%def>

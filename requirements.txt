@@ -1,9 +1,0 @@
-Beaker==1.6.4
-Mako==0.9.1
-MarkupSafe==0.21
-PyYAML==3.11
-backports.ssl-match-hostname==3.4.0.2
-pynag==0.8.9
-tornado==3.2
-wsgiref==0.1.2
-pymongo==2.6.3

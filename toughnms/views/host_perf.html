@@ -1,0 +1,206 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+<script src="/static/js/highcharts.js"></script>
+<script src="/static/js/charttheme.js"></script>
+<script src="/static/js/exporting.js"></script>
+<script src="/static/js/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" href="/static/js/datepicker.css"> 
+<style> 
+@media print{
+ body{font-size: 12px;}
+}
+</style>
+<script>
+function updateHost() {
+    var group_name = $("#group_name").val();
+    $.get("/perfdata/hosts?group_name=" + group_name, function (ev) {
+        $("#host_name").empty();
+        $.each(ev.data, function (index, host) {
+            var is_sel = '${host_name}' == host.host_name ? "selected" : "";
+            $("#host_name").append("<option value='" + host.host_name + "'"+is_sel+">" + host.host_desc + "</option>");
+        });
+    }, "json");
+}
+
+
+$(function () {
+
+    $("#day_code").datepicker();
+
+    Highcharts.setOptions({ global: { useUTC: false } });   
+
+    var disk_options = {
+        credits : {enabled:false},
+        chart: {type: 'area',renderTo: 'disk-chart',},
+        title: {text: '${host_name} - 磁盘使用量'},
+        subtitle: {text: '${"%s 00:00:00 -- %s 23:59:59"%(day_code,day_code)}'},
+        xAxis: {type: 'datetime',tickInterval : 3600*1000},
+        yAxis: {max: 100,min: 0,title: {text: '百分比'},
+            labels: {formatter: function() {return this.value +'%';}}         
+        },
+        tooltip: {shared: true},
+        legend: {enabled: true},    
+        plotOptions: {area: {
+            fillOpacity: 0.2,
+            marker: {enabled: false,symbol: 'circle',radius: 2,states: {hover: {enabled: true}}}
+        }},        
+        series:  [{}]
+    };
+
+    var swap_options = {
+        credits : {enabled:false},
+        chart: {type: 'area',renderTo: 'swap-chart',},
+        title: {text: '${host_name} - 交换分区使用量'},
+        subtitle: {text: '${"%s 00:00:00 -- %s 23:59:59"%(day_code,day_code)}'},
+        xAxis: {type: 'datetime',tickInterval : 3600*1000},
+        yAxis: {max: 100,min: 0,title: {text: '百分比'},
+            labels: {formatter: function() {return this.value +'%';}}            
+        },
+        tooltip: {shared: true},
+        legend: {enabled: false},    
+        plotOptions: {area: {
+            stacking: 'normal',
+            marker: {enabled: false,symbol: 'circle',radius: 2,states: {hover: {enabled: true}}}
+        }},           
+        series: [{}]
+    };
+
+    var load_options ={
+        chart: {type: 'area',renderTo: 'load-chart',},
+        title: {text: '${host_name} - 系统负载'},
+        subtitle: {text: '${"%s 00:00:00 -- %s 23:59:59"%(day_code,day_code)}'},
+        legend: {enabled: true},  
+        xAxis: {type: 'datetime',tickInterval : 3600*1000},
+        yAxis: {title: {text: '系统负载'}},
+        tooltip: {shared: true},
+        credits: {enabled: false},
+        plotOptions: {area: {
+            fillOpacity: 0.5,
+            stacking: 'normal',
+            marker: {enabled: false,symbol: 'circle',radius: 2,states: {hover: {enabled: true}}}
+        }},      
+        series: [{},{},{}]
+    };
+
+    params = {host_name:"${host_name}","begin_time":"${begin_time}","end_time":"${end_time}",_xsrf: '${handler.xsrf_token}'};
+    $.post("/perfdata/disk_usage", params, function (ev) {
+        if (ev.code == 0) {
+            disk_options.series = ev.data;
+            var chart = new Highcharts.Chart(disk_options);
+        }
+    },"json");
+
+    $.post("/perfdata/swap_usage", params, function (ev) {
+        if (ev.code == 0) {
+            swap_options.series = ev.data;
+            var chart = new Highcharts.Chart(swap_options);
+        }
+    },"json");
+
+    $.post("/perfdata/load_perf", params, function (ev) {
+        if (ev.code == 0) {
+            load_options.series = ev.data;
+            var chart = new Highcharts.Chart(load_options);
+        }
+    },"json");    
+
+    updateHost();    
+
+});
+
+function doPrint()
+{
+ var newstr = document.getElementById("print-area").innerHTML;
+ var oldstr = document.body.innerHTML;
+ document.body.innerHTML=newstr;
+ window.print();
+ document.body.innerHTML=oldstr;    
+}
+</script>
+</%def>
+<%def name="body()">
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa fa-desktop"></i>
+            <h3 class="box-title">主机性能监控</h3>
+        </div>
+        <div class="box-body">
+        <div class="container">
+         <form class="form-horizontal" role="form" action="/perfdata" method="post">
+            ${handler.xsrf_form_html()}
+            <div class="form-group">
+                <label for="group_name" class="col-md-2 control-label">主机分组</label>
+                <div class="col-md-3">
+                    <select id="group_name" name="group_name" class="form-control" onchange="updateHost();">
+                        <option></option>
+                        % for group in groups:
+                        <option value="${group.hostgroup_name}" ${group.hostgroup_name == group_name and "selected" or ""}>${group.alias}</option>
+                        % endfor
+                    </select>
+                </div>
+                <label for="group_name" class="col-md-2 control-label">主机</label>
+                <div class="col-md-3">
+                    <select id="host_name" name="host_name" class="form-control" >
+                    </select>
+                </div>                
+
+            </div>
+            <div class="form-group">
+               <label for="day_code" class="col-md-2 control-label">日期</label>
+
+                <div class="col-md-3">
+                    <input type="text" id="day_code" name="day_code" class="form-control" value="${day_code or utils.get_currdate()}">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-default">查询</button>
+                    <button type="button" class="btn btn-default" onclick="doPrint();">打印</button>
+                </div>                
+            </div>
+        </form>
+        <div class="clearfix"></div>
+        <hr>
+ 
+        <div id="print-area">
+            <div class="perf-table">         
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th colspan=5 class="status_header"><span class="glyphicon glyphicon-cog"></span> ${host and host.host_name} - ${host.address} - ${host.alias}</th>
+                </tr>                
+                <tr>
+                    <th>服务</th>
+                    <th>状态</th>
+                    <th>最后检测</th>
+                    <th>重试</th>
+                    <th>状态信息</th>
+                </tr>
+                </thead>
+                <tbody>
+               
+                 % for service in host.get_effective_services():
+                 <% 
+                     curr_status =  service.get_current_status()
+                 %>
+                <tr >
+                    <td><span class="glyphicon glyphicon-minus"></span>  ${service.get_shortname()}</td>
+                    <td class="${STYLE[int(curr_status['current_state'])]}">${STATUS[int(curr_status['current_state'])]}</td>
+                    <td>${utils.get_datetime(float(curr_status['last_check']))}</td>
+                    <td>${curr_status['current_attempt']}/${curr_status['max_attempts']}</td>
+                    <td>${utils.split_mline(utils.safeunicode(curr_status['plugin_output']),72,'<br>')}</td>
+                </tr>
+                % endfor
+                </tbody>
+            </table>
+            </div>
+
+            <div id="disk-chart" class="perf-chart"></div>   
+            <div id="swap-chart" class="perf-chart"></div>   
+            <div id="load-chart" class="perf-chart"></div>   
+
+        </div>
+        </div>
+    </div>
+</div>
+</%def>
