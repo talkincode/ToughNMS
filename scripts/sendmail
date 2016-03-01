@@ -27,6 +27,7 @@ def safestr(val):
 def sendmail(mailto,topic,content):
     try:
         params = {
+            "token" : open("/var/toughnms/token",'rb').read().strip(),
             "mailto" : safestr(mailto),
             "topic" : safestr(topic),
             "content" : safestr(content)

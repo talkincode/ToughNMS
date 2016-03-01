@@ -4,6 +4,13 @@
     $(function () {
         $('[data-toggle="popover"]').popover()
     })
+
+    function update_secret()
+    {
+        $.post("/config/secret/update", {'_xsrf': '${handler.xsrf_token}'}, function (data) {
+            window.location.reload();
+        },"json");
+    }
 </script>
 </%def>
 

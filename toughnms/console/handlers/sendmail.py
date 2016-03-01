@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding:utf-8
-
+from hashlib import md5
 from toughlib import utils,logger
 from toughnms.console.handlers.base import BaseHandler, MenuSys
 from toughlib.permit import permit
@@ -23,6 +23,10 @@ class SendMailHandler(BaseHandler):
             from_addr=from_addr, mailto=mailto, topic=topic, content=content)
 
     def get(self):
+        token = self.get_argument("token",None)
+        if not token or  token not in md5(self.settings.config.system.secret.encode('utf-8')).hexdigest():
+            return self.render_json(code=1,msg=u"token invalid")
+
         mailto = self.get_argument('mailto')
         topic = self.get_argument('topic')
         ctx = self.get_argument('content')

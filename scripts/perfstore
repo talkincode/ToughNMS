@@ -5,7 +5,6 @@ import urllib
 import argparse
 import sys
 import os
-from hashlib import md5
 
 def safestr(val):
     if val is None:
@@ -28,7 +27,7 @@ def safestr(val):
 def perfstore(lastcheck,host,service,command,data):
     try:
         params = {
-            "token" : md5(open("/var/toughnms/token",'rb').read().strip()).hexdigest(),
+            "token" : open("/var/toughnms/token",'rb').read().strip(),
             "lastcheck" : safestr(lastcheck),
             "host" : safestr(host),
             "service" : safestr(service),

@@ -206,14 +206,6 @@ case "$1" in
     install $2
   ;;
 
-  install_with_lmysql)
-    install_with_lmysql $2
-  ;;
-
-  install_with_rmysql)
-    install_with_rmysql $2
-  ;;
-
   remove)
     remove $2
   ;;

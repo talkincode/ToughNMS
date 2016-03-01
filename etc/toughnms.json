@@ -3,16 +3,25 @@
         "host": "0.0.0.0", 
         "port": 8099
     }, 
-    "conf_file": "toughnms.json", 
+    "conf_file": "etc/toughnms.json", 
     "database": {
         "backup_path": "/var/toughnms/data", 
         "dbtype": "sqlite", 
         "dburl": "sqlite:////var/toughnms/toughnms.sqlite3", 
         "echo": 0, 
+        "mongodb_port": 27017, 
+        "mongodb_url": "127.0.0.1", 
         "pool_recycle": 300, 
-        "pool_size": 120,
-        "mongodb_url":"127.0.0.1",
-        "mongodb_port":27017
+        "pool_size": 120
+    }, 
+    "nagios": {
+        "host_file": "hosts", 
+        "nagios_bin": "/usr/local/bin/nagios", 
+        "nagios_cfg": "/usr/local/etc/nagios/nagios.cfg", 
+        "nagios_contact_cfg": "/usr/local/etc/nagios/objects/contacts.cfg", 
+        "nagios_host_cfg_dir": "/usr/local/etc/nagios/servers", 
+        "nagios_host_group_cfg": "/usr/local/etc/nagios/objects/hostgroups.cfg", 
+        "nagios_service": "nagios"
     }, 
     "syslog": {
         "enable": 0, 
@@ -23,16 +32,7 @@
     }, 
     "system": {
         "debug": 1, 
-        "secret": "0BOTrVO6WRtkRnKTmM52nKfQpvCGY8vD", 
+        "secret": "jZljJW9IZGgOjCgAGotrpvzinrZD8eoD", 
         "tz": "CST-8"
-    },
-    "nagios" : {
-        "host_file" : "hosts",
-        "nagios_bin" : "/usr/local/bin/nagios",
-        "nagios_cfg" : "/usr/local/etc/nagios/nagios.cfg",
-        "nagios_contact_cfg" : "/usr/local/etc/nagios/objects/contacts.cfg",
-        "nagios_host_cfg_dir" : "/usr/local/etc/nagios/servers",
-        "nagios_host_group_cfg" : "/usr/local/etc/nagios/objects/hostgroups.cfg",
-        "nagios_service" : "nagios"
     }
 }

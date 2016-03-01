@@ -73,7 +73,7 @@ class HostPerfStoreHandler(base.BaseHandler):
 
     def post(self):
         token = self.get_argument("token",None)
-        if not token or not token in md5(self.settings.config.system.secret.encode('utf-8')).hexdigest():
+        if not token or token not in md5(self.settings.config.system.secret.encode('utf-8')).hexdigest():
             return self.render_json(code=1,msg=u"token invalid")
 
         command = self.get_argument("command",None)

@@ -4,6 +4,7 @@ import cyclone.auth
 import cyclone.escape
 import cyclone.web
 import base
+from toughlib import utils, logger, dispatch
 from toughnms.console.forms import config_forms
 from toughnms.console.handlers.base import MenuSys
 from toughnms.console.settings import *
@@ -11,6 +12,7 @@ from toughlib.permit import permit
 from cyclone.web import authenticated
 from toughnms.console import models
 from toughlib import dispatch,db_cache
+from hashlib import md5
 import ConfigParser
 
 @permit.route(r"/config", u"参数配置管理", MenuSys, order=1.0011, is_menu=True)
@@ -46,10 +48,23 @@ class DefaultHandler(base.BaseHandler):
     @cyclone.web.authenticated
     def post(self):
         config = self.settings.config
-        config.system.debug = self.get_argument("debug")
+        config.system.debug = int(self.get_argument("debug",1))
         config.system.tz = self.get_argument("tz")
         config.update()
         self.redirect("/config?active=default")
+
+@permit.route(r"/config/secret/update", u"系统密钥更新", MenuSys, order=1.00221, is_menu=False)
+class SecretHandler(base.BaseHandler):
+
+    @cyclone.web.authenticated
+    def post(self):
+        new_secret = utils.gen_secret(32)
+        self.application.aes = utils.AESCipher(key=new_secret)
+        self.settings.config['system']['secret'] = new_secret
+        self.settings.config.save()
+        with open("/var/toughnms/token","wb") as tf:
+            tf.write(md5(new_secret).hexdigest())
+        self.render_json(code=0)
 
 
 @permit.route(r"/config/database/update", u"数据库配置", MenuSys, order=1.0023)
