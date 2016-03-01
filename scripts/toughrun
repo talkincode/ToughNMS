@@ -21,6 +21,7 @@ install()
     chmod +x /usr/local/bin/sendmail
     chmod +x /usr/local/bin/perfstore
 
+    echo "" > /usr/local/nagios/etc/objects/hostgroups.cfg
     /bin/cp /opt/toughnms/etc/nagios.cfg /usr/local/nagios/etc/nagios.cfg
     /bin/cp /opt/toughnms/etc/commands.cfg /usr/local/nagios/etc/objects/commands.cfg
     /bin/cp /opt/toughnms/etc/contacts.cfg /usr/local/nagios/etc/objects/contacts.cfg
@@ -51,12 +52,6 @@ manage()
 {
     initserv
     pypy /opt/toughnms/toughctl --manage
-}
-
-
-nagios()
-{
-    nagios /usr/local/nagios/etc/nagios.cfg
 }
 
 mongodb()
@@ -104,9 +99,6 @@ case "$1" in
     manage
   ;;
 
-  nagios)
-    nagios
-  ;;
 
   mongodb)
     mongodb
