@@ -8,6 +8,7 @@ from toughlib.dbengine import get_engine
 from toughnms.common import initdb as init_db
 from toughlib import dispatch,logger
 from twisted.internet import reactor
+from hashlib import md5
 import argparse
 import sys
 import os
@@ -52,6 +53,9 @@ def run():
     syslog = logger.Logger(config)
     dbengine = get_engine(config)
     dispatch.register(syslog)
+
+    with open("/var/toughnms/token","wb") as tf:
+        tf.write(md5(config.system.secret).hexdigest())
 
     update_timezone(config)
     check_env(config)
