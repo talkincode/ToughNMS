@@ -1,17 +1,24 @@
-ToughNag
-========
+# ToughNMS
 
-一个基于Python+Nagios+influxdb实现的监控管理应用
-
-依赖模块
----------
-
-    influxdb
-    pynag
+一个基于Python+Nagios+mongodb实现的监控管理应用
 
 
-快速开始
----------
 
-    
+## nagios 配置
 
+### perfdata
+
+    # 'process-host-perfdata' command definition
+    define command{
+            command_name    process-host-perfdata
+            command_line    curl -d "l=$LASTHOSTCHECK$&c=$SERVICECHECKCOMMAND$&h=$HOSTNAME$&d=$HOSTPERFDATA$" \
+             "http://localhost:8099/perfdata/store"
+    }
+
+
+    # 'process-service-perfdata' command definition
+    define command{
+            command_name    process-service-perfdata
+            command_line    curl -d "l=$LASTSERVICECHECK$&c=$SERVICECHECKCOMMAND$&h=$HOSTNAME$&s=SERVICEDESC&d=$SERVICEPERFDATA$" \
+            "http://localhost:8099/perfdata/store"
+    }

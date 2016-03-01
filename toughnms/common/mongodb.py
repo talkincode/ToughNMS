@@ -13,6 +13,11 @@ class MongoDB:
     def reconnect(self,server="localhost",port=27017):
         self.mdb = MongoClient(server, port)
 
+    def add_perfdata(self,host,data):
+        db = self.mdb['nagios_perfdata']
+        coll = db[str(host)]
+        coll.insert(data)
+
     def default_start_end(self):
         day_code = datetime.datetime.now().strftime("%Y-%m-%d")
         begin = datetime.datetime.strptime("%s 00:00:00"%day_code,"%Y-%m-%d %H:%M:%S")

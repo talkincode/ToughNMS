@@ -26,7 +26,7 @@ class SendMailHandler(BaseHandler):
     def get(self):
         mailto = self.get_argument('mailto')
         topic = self.get_argument('topic')
-        ctx = self.get_argument('content')
+        ctx = self.get_argument('ctx')
         logger.info("sendmail: %s %s %s"% (mailto, utils.safeunicode(topic), utils.safeunicode(ctx)))
         self.send_mail(email, topic, ctx).addCallbacks(logger.info,logger.error)
         self.render_json(code=0,msg="mail send done")

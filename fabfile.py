@@ -10,7 +10,7 @@ def tag():
     local("git push origin v%s:v%s"%(__version__,__version__))
 
 def run():
-    local("pypy toughctl --admin -c etc/toughnms.json")
+    local("pypy toughctl --manage -c etc/toughnms.json")
 
 
 def initdb():

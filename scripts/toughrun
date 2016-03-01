@@ -1,0 +1,106 @@
+#!/bin/sh
+# toughnms docker install script
+# author: jamiesun.net@gmail.com
+# version: 0.0.16
+
+set -e
+
+install()
+{
+    pypy -m pip install https://github.com/talkincode/toughlib/archive/master.zip --upgrade --no-deps
+
+    git clone -b stable https://github.com/talkincode/ToughNMS.git /opt/toughnms
+
+    cp /opt/toughnms/etc/toughnms.json /etc/toughnms.json
+    cp /opt/toughnms/etc/supervisord.conf /etc/supervisord.conf
+
+    chmod +x /opt/toughnms/toughctl
+
+    chmod +x /opt/toughnms/scripts/sendmail
+
+    /bin/cp /opt/toughnms/etc/nagios.cfg /usr/local/nagios/etc/nagios.cfg
+    /bin/cp /opt/toughnms/etc/commands.cfg /usr/local/nagios/etc/objects/commands.cfg
+}
+
+initserv()
+{
+    if [ ! -f "/var/toughnms/data" ];then
+        mkdir -p /var/toughnms/data
+    fi
+
+    if [ ! -f "/var/toughnms/.install" ];then
+        pypy /opt/toughnms/toughctl --initdb
+        echo "ok" > /var/toughnms/.install
+        echo "init database ok!"
+    fi
+
+    echo "init service ok!"
+}
+
+manage()
+{
+    initserv
+    pypy /opt/toughnms/toughctl --manage
+}
+
+
+nagios()
+{
+    nagios /usr/local/nagios/etc/nagios.cfg
+}
+
+upgrade()
+{
+    cd /opt/toughnms
+    git fetch origin stable
+    git reset --hard FETCH_HEAD
+    git clean -df
+}
+
+upgrade_dev()
+{
+    cd /opt/toughnms
+    git fetch origin master
+    git reset --hard FETCH_HEAD
+    git clean -df
+}
+
+
+uplib()
+{
+    pypy -m pip install https://github.com/talkincode/toughlib/archive/master.zip --upgrade --no-deps
+}
+
+case "$1" in
+
+  install)
+    install
+  ;;
+
+  initserv)
+    initserv
+  ;;
+
+
+  manage)
+    manage
+  ;;
+
+  nagios)
+    nagios
+  ;;
+
+  upgrade)
+    upgrade
+  ;;
+
+  upgrade_dev)
+    upgrade_dev
+  ;;
+
+  uplib)
+    uplib
+  ;;
+
+esac
+

@@ -40,7 +40,7 @@ def run_initdb(config):
 def run():
     log.startLogging(sys.stdout)
     parser = argparse.ArgumentParser()
-    parser.add_argument('-admin', '--admin', action='store_true', default=False, dest='admin', help='run admin')
+    parser.add_argument('-manage', '--manage', action='store_true', default=False, dest='manage', help='run manage')
     parser.add_argument('-initdb', '--initdb', action='store_true', default=False, dest='initdb', help='run initdb')
     parser.add_argument('-port', '--port', type=int, default=0, dest='port', help='admin port')
     parser.add_argument('-debug', '--debug', action='store_true', default=False, dest='debug', help='debug option')
@@ -62,7 +62,7 @@ def run():
     if args.port > 0:
         config.server.port = int(args.port)
 
-    if args.admin:
+    if args.manage:
         from toughnms.console import admin_app
         admin_app.run(config,dbengine)
         reactor.run()

@@ -106,6 +106,16 @@ class HostPerfLoadHandler(base.BaseHandler):
         self.render_json(data=[load1,load5,load15])
              
 
+@permit.route('/perfdata/store')
+class HostPerfStoreHandler(base.BaseHandler):
+
+    def get(self):
+        token = self.get_argument("token",None)
+        if not token or token not in self.settings.config.system.secret:
+            return self.render_json(code=1,msg=u"token invalid")
+
+        
+
 
 
 
