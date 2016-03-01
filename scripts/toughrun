@@ -61,6 +61,9 @@ nagios()
 
 mongodb()
 {
+    if [ ! -f "/var/toughnms/data/mdb" ];then
+        mkdir -p /var/toughnms/data/mdb
+    fi
     mongod --dbpath /var/toughnms/data/mdb
 }
 
