@@ -55,7 +55,7 @@ radius:
     container_name: radius_${instance}
     image: "index.alauda.cn/toughstruct/toughnms:${tn_release}"
     ports:
-        - "${web_port}:1816"
+        - "${web_port}:8099"
     restart: always
     ulimits:
         nproc: 65535
