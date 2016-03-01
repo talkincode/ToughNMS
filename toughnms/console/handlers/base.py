@@ -16,6 +16,7 @@ import logging
 import urllib
 import urlparse
 from toughnms.console.settings import *
+from toughnms.console import models
 from toughnms import __version__ as sys_version
 
 

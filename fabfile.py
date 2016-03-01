@@ -12,6 +12,14 @@ def tag():
 def run():
     local("pypy toughctl --manage -c etc/toughnms.json")
 
+def suprun():
+    local("supervisord -c etc/supervisord_test.conf")
+
+def admlog():
+    local("tail -f  /var/toughnms/toughnms.log")
+
+def naglog():
+    local("tail -f  /var/toughnms/nagios.log")
 
 def initdb():
     local("pypy toughctl --initdb -c etc/toughnms.json")

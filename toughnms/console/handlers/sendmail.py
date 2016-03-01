@@ -9,7 +9,6 @@ from cyclone.web import authenticated
 from toughlib.mail import send_mail as sendmail
 from email.mime.text import MIMEText
 from email import Header
-from hashlib import md5
 
 @permit.route(r"/sendmail", u"发送邮件", MenuSys, order=6.0000)
 class SendMailHandler(BaseHandler):
@@ -26,9 +25,9 @@ class SendMailHandler(BaseHandler):
     def get(self):
         mailto = self.get_argument('mailto')
         topic = self.get_argument('topic')
-        ctx = self.get_argument('ctx')
+        ctx = self.get_argument('content')
         logger.info("sendmail: %s %s %s"% (mailto, utils.safeunicode(topic), utils.safeunicode(ctx)))
-        self.send_mail(email, topic, ctx).addCallbacks(logger.info,logger.error)
+        self.send_mail(mailto, topic, ctx).addCallbacks(logger.info,logger.error)
         self.render_json(code=0,msg="mail send done")
 
         

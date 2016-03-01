@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import division
-#coding=utf-8
+from hashlib import md5
 import base
 import time
 import os
@@ -69,21 +69,28 @@ parse_funcs = {
 class HostPerfStoreHandler(base.BaseHandler):
 
     def get(self):
-        token = self.get_argument("t",None)
-        if not token or token not in self.settings.config.system.secret:
+        self.post()
+
+    def post(self):
+        token = self.get_argument("token",None)
+        if not token or not token in md5(self.settings.config.system.secret.encode('utf-8')).hexdigest():
             return self.render_json(code=1,msg=u"token invalid")
 
-        pref_cmd = self.get_argument("c",None)
-        if not pref_cmd:
+        command = self.get_argument("command",None)
+        if not command:
             return self.render_json(code=1,msg=u"cmd invalid")
 
-        host = self.get_argument("h",None)
+        pref_cmd = ([p for p in parse_funcs.keys() if p in command] or [None])[0]
+        if not pref_cmd:
+            return self.render_json(code=1,msg=u"command %s not support" % command)
+
+        host = self.get_argument("host",None)
         if not host:
             return self.render_json(code=1,msg=u"host invalid")
 
-        lastcheck = self.get_argument("l","")
-        service = self.get_argument("s","")
-        perf_data = self.get_argument("d",""),
+        lastcheck = self.get_argument("lastcheck","")
+        service = self.get_argument("service","")
+        perf_data = self.get_argument("data",""),
 
         if not all ([lastcheck,perf_data]):
             return self.render_json(code=1,msg=u"lastcheck,perf_data invalid")
@@ -93,9 +100,9 @@ class HostPerfStoreHandler(base.BaseHandler):
             host = host,
             service = service,
             command = pref_cmd,
-            data = parse_funcs[pref_cmd](data)
+            data = parse_funcs[pref_cmd](perf_data)
         )
-        log.debug("perfdata_command insert to db %s"%repr(data))
+        logger.debug("perfdata_command insert to db %s"%repr(data))
         self.mongodb.add_perfdata(data)
         self.render_json(code=0,msg=u"success")
 
