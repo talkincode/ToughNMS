@@ -1,0 +1,54 @@
+#!/usr/bin/env pypy
+#coding=utf-8
+import urllib2
+import urllib
+import argparse
+import sys
+import os
+from hashlib import md5
+
+def safestr(val):
+    if val is None:
+        return ''
+
+    if isinstance(val, unicode):
+        try:
+            return val.encode('utf-8')
+        except:
+            return val.encode('gb2312')
+    elif isinstance(val, str):
+        return val
+    else:
+        try:
+            return str(val)
+        except:
+            return val
+    return val
+
+def perfstore(lastcheck,host,service,command,data):
+    try:
+        params = {
+            "token" : md5(open("/var/toughnms/token",'rb').read().strip()).hexdigest(),
+            "lastcheck" : safestr(lastcheck),
+            "host" : safestr(host),
+            "service" : safestr(service),
+            "command" : safestr(command),
+            "data" : safestr(data)
+        }
+        url = 'http://localhost:8099/perfdata/store?%s'%(urllib.urlencode(params))
+        print url
+        response = urllib2.urlopen(url)
+        print response.read()
+    except urllib2.HTTPError, e:
+        print e.code
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--lastcheck', type=str, default=None, dest='lastcheck', help='lastcheck param')
+    parser.add_argument('-H', '--host', type=str, default=None, dest='host', help='host param')
+    parser.add_argument('-s', '--service', type=str, default=None, dest='service', help='service param')
+    parser.add_argument('-c', '--command', type=str, default=None, dest='command', help='command param')
+    parser.add_argument('-d', '--data', type=str, default=None, dest='data', help='data param')
+    args = parser.parse_args(sys.argv[1:])
+    perfstore(args.lastcheck, args.host, args.service, args.command, args.data)
+    

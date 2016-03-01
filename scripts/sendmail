@@ -1,0 +1,50 @@
+#!/usr/bin/env pypy
+#coding=utf-8
+import urllib2
+import urllib
+import argparse
+import sys
+import os
+
+def safestr(val):
+    if val is None:
+        return ''
+
+    if isinstance(val, unicode):
+        try:
+            return val.encode('utf-8')
+        except:
+            return val.encode('gb2312')
+    elif isinstance(val, str):
+        return val
+    else:
+        try:
+            return str(val)
+        except:
+            return val
+    return val
+
+def sendmail(mailto,topic,content):
+    try:
+        params = {
+            "mailto" : safestr(mailto),
+            "topic" : safestr(topic),
+            "content" : safestr(content)
+        }
+        url = 'http://localhost:8099/sendmail?%s'%(urllib.urlencode(params))
+        print url
+        response = urllib2.urlopen(url)
+        print response.read()
+    except urllib2.HTTPError, e:
+        print e.code
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-mailto', '--mailto', type=str, default=None, dest='mailto', help='mailto param')
+    parser.add_argument('-topic', '--topic', type=str, default=None, dest='topic', help='topic param')
+    parser.add_argument('-ctx', '--ctx', type=str, default=None, dest='ctx', help='ctx param')
+    args = parser.parse_args(sys.argv[1:])
+    if args.mailto and args.topic and args.ctx:
+        sendmail(args.mailto,args.topic,args.ctx)
+    else:
+        print "param Invalid"
