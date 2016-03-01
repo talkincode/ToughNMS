@@ -1,7 +1,7 @@
 #!/bin/sh
 # toughnms docker install script
 # author: jamiesun.net@gmail.com
-# version: 0.0.16
+# version: 0.0.1
 
 set -e
 
@@ -16,16 +16,26 @@ install()
 
     chmod +x /opt/toughnms/toughctl
 
-    chmod +x /opt/toughnms/scripts/sendmail
+    \cp /opt/toughnms/scripts/sendmail /usr/local/bin/sendmail
+    \cp /opt/toughnms/scripts/perfstore /usr/local/bin/perfstore
+    chmod +x /usr/local/bin/sendmail
+    chmod +x /usr/local/bin/perfstore
 
     /bin/cp /opt/toughnms/etc/nagios.cfg /usr/local/nagios/etc/nagios.cfg
     /bin/cp /opt/toughnms/etc/commands.cfg /usr/local/nagios/etc/objects/commands.cfg
+    /bin/cp /opt/toughnms/etc/contacts.cfg /usr/local/nagios/etc/objects/contacts.cfg
+    /bin/cp /opt/toughnms/etc/templates.cfg /usr/local/nagios/etc/objects/templates.cfg
+    /bin/cp /opt/toughnms/etc/localhost.cfg /usr/local/nagios/etc/objects/localhost.cfg
 }
 
 initserv()
 {
     if [ ! -f "/var/toughnms/data" ];then
         mkdir -p /var/toughnms/data
+    fi
+
+    if [ ! -f "/var/toughnms/data/mdb" ];then
+        mkdir -p /var/toughnms/data/mdb
     fi
 
     if [ ! -f "/var/toughnms/.install" ];then
@@ -47,6 +57,11 @@ manage()
 nagios()
 {
     nagios /usr/local/nagios/etc/nagios.cfg
+}
+
+mongodb()
+{
+    mongod --dbpath /var/toughnms/data/mdb
 }
 
 upgrade()
@@ -88,6 +103,10 @@ case "$1" in
 
   nagios)
     nagios
+  ;;
+
+  mongodb)
+    mongodb
   ;;
 
   upgrade)

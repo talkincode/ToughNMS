@@ -90,7 +90,9 @@ class HostPerfStoreHandler(base.BaseHandler):
 
         lastcheck = self.get_argument("lastcheck","")
         service = self.get_argument("service","")
-        perf_data = self.get_argument("data",""),
+        perf_data = self.get_argument("data","")
+
+        logger.info("params: %s %s %s %s %s"%(lastcheck, host,command,service,perf_data))
 
         if not all ([lastcheck,perf_data]):
             return self.render_json(code=1,msg=u"lastcheck,perf_data invalid")
@@ -103,7 +105,7 @@ class HostPerfStoreHandler(base.BaseHandler):
             data = parse_funcs[pref_cmd](perf_data)
         )
         logger.debug("perfdata_command insert to db %s"%repr(data))
-        self.mongodb.add_perfdata(data)
+        self.mongodb.add_perfdata(host,data)
         self.render_json(code=0,msg=u"success")
 
 

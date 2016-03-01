@@ -21,6 +21,9 @@ def admlog():
 def naglog():
     local("tail -f  /var/toughnms/nagios.log")
 
+def mdblog():
+    local("tail -f  /var/toughnms/mongodb.log")
+
 def initdb():
     local("pypy toughctl --initdb -c etc/toughnms.json")
 

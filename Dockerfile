@@ -1,7 +1,7 @@
-FROM index.alauda.cn/toughstruct/tough-pypy:kiss
+FROM index.alauda.cn/toughstruct/tough-pypy:nagios
 MAINTAINER jamiesun <jamiesun.net@gmail.com>
 
-VOLUME [ "/var/toughradius" ]
+VOLUME [ "/var/toughnms" ]
 
 ADD scripts/toughrun /usr/local/bin/toughrun
 RUN chmod +x /usr/local/bin/toughrun
