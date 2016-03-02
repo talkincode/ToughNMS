@@ -33,12 +33,6 @@
         <li role="presentation" class="${active=='default' and 'active' or '' }">
             <a href="#default" aria-controls="default" role="tab" data-toggle="tab">系统设置</a>
         </li>
-        <li role="presentation" class="${active=='database' and 'active' or '' }">
-            <a href="#database" aria-controls="database" role="tab" data-toggle="tab">数据库设置</a>
-        </li>
-        <li role="presentation" class="${active=='nagios' and 'active' or '' }">
-            <a href="#nagios" aria-controls="nagios" role="tab" data-toggle="tab">nagios设置</a>
-        </li>
         <li role="presentation" class="${active=='mail' and 'active' or '' }">
             <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab">邮件服务设置</a>
         </li>
@@ -50,18 +44,6 @@
             <form class="form-horizontal form-well" role="form" action="${default_form.action}" method="post">
                 ${xsrf_form_html()}
                 ${default_form.render_css()}
-            </form>
-        </div>
-        <div role="tabpanel" class="tab-pane ${active=='database' and 'active' or '' }" id="database">
-            <form class="form-horizontal form-well" role="form" action="${database_form.action}" method="post">
-                ${xsrf_form_html()}
-                ${database_form.render_css()}
-            </form>
-        </div>
-        <div role="tabpanel" class="tab-pane ${active=='nagios' and 'active' or '' }" id="nagios">
-            <form class="form-horizontal form-well" role="form" action="${nagios_form.action}" method="post">
-                ${xsrf_form_html()}
-                ${nagios_form.render_css()}
             </form>
         </div>
         <div role="tabpanel" class="tab-pane ${active=='mailcfg' and 'active' or '' }" id="mail">

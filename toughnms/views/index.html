@@ -1,94 +1,6 @@
 <%inherit file="base.html"/>
 <%def name="head()">
 <script>
-    function busy(flag) {
-        if (flag) {
-            $("#loading").show();
-            $("#inbox").html("")
-            $("#inbox").hide();
-        } else {
-            $("#loading").hide();
-            $("#inbox").show();
-        }
-    }
-
-
-    function update() {
-        busy(true);
-        $.post("/dashboard/update", {_xsrf: '${handler.xsrf_token}'}, function (data) {
-            $("#status_line").html(data.value)
-            busy(false);
-        },"json");
-    }
-
-    function execute_cmd(exec) {
-        busy(true);
-        params = {exec: exec, _xsrf: '${handler.xsrf_token}'};
-        $.post("/nagios/ctl", params, function (data) {
-            msg = '<div class="alert alert-info">执行结果: ' + data.msg + '</div>'
-            $("#inbox").html(msg.replace(/\n/g, "<br>"));
-            busy(false);
-        }, "json");
-    }
-
-    function initctl(){
-        $(".exec").click(function (i) {
-            cmdid = this.id;
-            if (cmdid == "stop") {
-                if (!confirm("确认停止Nagios进程吗？")) {
-                    return false;
-                }
-            }
-            if (cmdid == "restart") {
-                if (!confirm("确认重启Nagios进程吗？")) {
-                    return false;
-                }
-            }
-            execute_cmd(this.id);
-        });
-    }
-
-
-    function restart() {
-        busy(true);
-        $.ajax({
-            url: '/dashboard/restart',
-            data:{_xsrf: '${handler.xsrf_token}'},
-            dataType:"json",
-            type: 'POST',
-            timeout: 9000,
-            error: function (xhr, textStatus) {
-                busy(false);
-                update()
-            },
-        });
-        setTimeout("update()", 9000);
-    }
-
-    $(document).ready(function () {
-        $("#loading").hide();
-        $("#inbox").hide();
-        $("#upgrade").click(function () {
-            upgrade();
-        });
-        $("#initdb").click(function () {
-            initdb();
-        });
-        $("#restart").click(function () {
-            restart();
-        });
-
-
-        $("#refresh").click(function () {
-            update()
-        });
-
-        initctl();
-
-        update();
-
-
-    });
 
 </script>
 </%def>
@@ -102,7 +14,7 @@
             <h3 class="box-title">控制面板</h3>
         </div>
         <div class="box-body">
-
+            <div class="container">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -126,70 +38,64 @@
                 </tbody>
 
             </table>
-            <!--<hr/>-->
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th colspan="2">服务状态</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><span id="status_line"></span></td>
-                    <td>
-                        <button type="button" id="restart" class="btn btn-sm btn-info">重启服务</button>
-                        <button type="button" id="refresh" class="btn btn-sm btn-info">刷新状态</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th colspan="4"> Nagios服务管理</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>刷新配置文件</td>
-                    <td>
-                        <button id="reload" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                    <td>检测配置文件</td>
-                    <td>
-                        <button id="verify" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>停止Nagios进程</td>
-                    <td>
-                        <button id="stop" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                    <td>启动Nagios进程</td>
-                    <td>
-                        <button id="start" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>重启Nagios进程</td>
-                    <td>
-                        <button id="restart" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                    <td>当前Nagios状态</td>
-                    <td>
-                        <button id="status" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <hr>
-            <div id="loading" style="display: none;"><img style="max-height: 90px;width: auto;"
-                                                          src="/static/img/loading.gif"></div>
-            <div id="inbox" class="text-info" style="height:120px;overflow:auto">
-
-            </div>
+            <hr>    
+            <div class="row">
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>0</h3>
+                  <p>主机群组</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="/group" class="small-box-footer">查看详情 <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>53</h3>
+                  <p>主机数量</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="/host" class="small-box-footer">查看详情 <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>44</h3>
+                  <p>监控服务数</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+                <a href="/status/hosts" class="small-box-footer">查看详情 <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>65</h3>
+                  <p>今日告警数</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="/alerts" class="small-box-footer">查看详情 <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+          </div><!-- /.row -->
+            
         </div>
+    </div>
     </div>
 </section>
 </%def>

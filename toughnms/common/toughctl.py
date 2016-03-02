@@ -55,7 +55,7 @@ def run():
     dispatch.register(syslog)
 
     with open("/var/toughnms/token","wb") as tf:
-        tf.write(md5(config.system.secret).hexdigest())
+        tf.write(md5(config.system.secret.encode('utf-8')).hexdigest())
 
     update_timezone(config)
     check_env(config)
