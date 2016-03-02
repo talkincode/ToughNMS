@@ -17,10 +17,10 @@
     "nagios": {
         "host_file": "hosts", 
         "nagios_bin": "/usr/local/bin/nagios", 
-        "nagios_cfg": "/usr/local/etc/nagios/nagios.cfg", 
-        "nagios_contact_cfg": "/usr/local/etc/nagios/objects/contacts.cfg", 
-        "nagios_host_cfg_dir": "/usr/local/etc/nagios/servers", 
-        "nagios_host_group_cfg": "/usr/local/etc/nagios/objects/hostgroups.cfg", 
+        "nagios_cfg": "/usr/local/nagios/etc/nagios.cfg", 
+        "nagios_contact_cfg": "/usr/local/nagios/etc/objects/contacts.cfg", 
+        "nagios_host_cfg_dir": "/usr/local/nagios/etc/servers", 
+        "nagios_host_group_cfg": "/usr/local/nagios/etc/objects/hostgroups.cfg", 
         "nagios_service": "nagios"
     }, 
     "syslog": {
