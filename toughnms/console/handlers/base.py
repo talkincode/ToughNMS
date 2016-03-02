@@ -120,6 +120,16 @@ class BaseHandler(cyclone.web.RequestHandler):
         return page_data
 
 
+    def get_mdb_page_data(self, query):
+        page_size = self.application.settings.get("page_size", 10)
+        page = int(self.get_argument("page", 1))
+        offset = (page - 1) * page_size
+        result = query.limit(page_size).skip(offset)
+        page_data = Paginator(self.get_page_url, page, query.count(), page_size)
+        page_data.result = result
+        return page_data
+
+
 
     def get_page_url(self, page, form_id=None):
         if form_id:

@@ -70,7 +70,14 @@ class DashboardHandler(BaseHandler):
 
     @cyclone.web.authenticated
     def get(self):
-        self.render("index.html")
+        group_count = self.nagapi.count_hostgroup()
+        host_count = self.nagapi.count_host()
+        service_count = self.nagapi.count_service()
+        self.render("index.html", 
+            group_count = self.nagapi.count_hostgroup(),
+            host_count = self.nagapi.count_host(),
+            service_count = self.nagapi.count_service(),
+            alert_count = self.mongodb.query_alert(None,None,None).count())
 
 
 permit.add_route(DashboardHandler, r"/", u"控制面板", MenuSys, order=1.0001)
