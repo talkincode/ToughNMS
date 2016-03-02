@@ -68,6 +68,9 @@ class NagiosApi:
         all_grps = (grp for grp in all_grps if grp.hostgroup_name)
         return all_grps
 
+    def count_hostgroup(self):
+        return len(Model.Hostgroup.objects.all)
+
     def get_hostgroup(self,group_name):
         try:
             return Model.Hostgroup.objects.get_by_shortname(group_name)
@@ -189,6 +192,9 @@ class NagiosApi:
         all_hosts = (host for host in all_hosts if host.host_name)        
         return all_hosts
 
+    def count_host(self):
+        return len(Model.Host.objects.filter(register='1'))
+
     def get_host(self,host_name):
         try:
             return Model.Host.objects.get_by_shortname(host_name)
@@ -261,6 +267,9 @@ class NagiosApi:
             return None
         services = host.get_effective_services()
         return services
+
+    def count_service(self):
+        return len(Model.Service.objects.filter(register='1'))
 
 
     def get_service(self,service_id):

@@ -9,9 +9,15 @@
 </script>
 </%def>
 <%def name="body()">
-    <div class="panel panel-default">
-    <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> ${form.title}
-    <a class="badge pull-right" href="javascript:history.go(-1);">返回</a>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa fa-edit"></i>
+            <h3 class="box-title">${form.title}</h3>
+            <div class="bar pull-right"><a href="javascript:history.go(-1);">返回</a></div>
+        </div>
+        <div class="box-body">
+            <div class="container">
     </div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" action="${form.action}" method="post">
@@ -20,6 +26,10 @@
         </form>
     </div>
 </div>
+</div>
+</section>
+  
+</section>
 
 <!-- Modal -->
 <div class="modal fade" id="helpDig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

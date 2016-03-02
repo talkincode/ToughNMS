@@ -1,94 +1,6 @@
 <%inherit file="base.html"/>
 <%def name="head()">
 <script>
-    function busy(flag) {
-        if (flag) {
-            $("#loading").show();
-            $("#inbox").html("")
-            $("#inbox").hide();
-        } else {
-            $("#loading").hide();
-            $("#inbox").show();
-        }
-    }
-
-
-    function update() {
-        busy(true);
-        $.post("/dashboard/update", {_xsrf: '${handler.xsrf_token}'}, function (data) {
-            $("#status_line").html(data.value)
-            busy(false);
-        },"json");
-    }
-
-    function execute_cmd(exec) {
-        busy(true);
-        params = {exec: exec, _xsrf: '${handler.xsrf_token}'};
-        $.post("/nagios/ctl", params, function (data) {
-            msg = '<div class="alert alert-info">执行结果: ' + data.msg + '</div>'
-            $("#inbox").html(msg.replace(/\n/g, "<br>"));
-            busy(false);
-        }, "json");
-    }
-
-    function initctl(){
-        $(".exec").click(function (i) {
-            cmdid = this.id;
-            if (cmdid == "stop") {
-                if (!confirm("确认停止Nagios进程吗？")) {
-                    return false;
-                }
-            }
-            if (cmdid == "restart") {
-                if (!confirm("确认重启Nagios进程吗？")) {
-                    return false;
-                }
-            }
-            execute_cmd(this.id);
-        });
-    }
-
-
-    function restart() {
-        busy(true);
-        $.ajax({
-            url: '/dashboard/restart',
-            data:{_xsrf: '${handler.xsrf_token}'},
-            dataType:"json",
-            type: 'POST',
-            timeout: 9000,
-            error: function (xhr, textStatus) {
-                busy(false);
-                update()
-            },
-        });
-        setTimeout("update()", 9000);
-    }
-
-    $(document).ready(function () {
-        $("#loading").hide();
-        $("#inbox").hide();
-        $("#upgrade").click(function () {
-            upgrade();
-        });
-        $("#initdb").click(function () {
-            initdb();
-        });
-        $("#restart").click(function () {
-            restart();
-        });
-
-
-        $("#refresh").click(function () {
-            update()
-        });
-
-        initctl();
-
-        update();
-
-
-    });
 
 </script>
 </%def>
@@ -102,7 +14,7 @@
             <h3 class="box-title">控制面板</h3>
         </div>
         <div class="box-body">
-
+            <div class="container">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -126,70 +38,50 @@
                 </tbody>
 
             </table>
-            <!--<hr/>-->
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th colspan="2">服务状态</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><span id="status_line"></span></td>
-                    <td>
-                        <button type="button" id="restart" class="btn btn-sm btn-info">重启服务</button>
-                        <button type="button" id="refresh" class="btn btn-sm btn-info">刷新状态</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th colspan="4"> Nagios服务管理</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>刷新配置文件</td>
-                    <td>
-                        <button id="reload" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                    <td>检测配置文件</td>
-                    <td>
-                        <button id="verify" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>停止Nagios进程</td>
-                    <td>
-                        <button id="stop" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                    <td>启动Nagios进程</td>
-                    <td>
-                        <button id="start" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>重启Nagios进程</td>
-                    <td>
-                        <button id="restart" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                    <td>当前Nagios状态</td>
-                    <td>
-                        <button id="status" type="button" class="btn btn-sm btn-info exec">执行</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <hr>    
 
-            <hr>
-            <div id="loading" style="display: none;"><img style="max-height: 90px;width: auto;"
-                                                          src="/static/img/loading.gif"></div>
-            <div id="inbox" class="text-info" style="height:120px;overflow:auto">
-
-            </div>
+          <!-- Info Boxes -->
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-sitemap"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="/group">主机群组</a></span>
+                  <span class="info-box-number">${group_count or 0}</span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-desktop"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="/host">主机数量</a></span>
+                  <span class="info-box-number">${host_count or 0}</span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-flag-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="/status/hosts">监控服务数</a></span>
+                  <span class="info-box-number">${service_count or 0}</span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-envelope-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="/alerts">今日告警数</a></span>
+                  <span class="info-box-number">${alert_count or 0}</span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+                    
         </div>
+    </div>
     </div>
 </section>
 </%def>

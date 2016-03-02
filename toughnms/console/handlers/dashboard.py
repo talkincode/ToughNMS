@@ -70,17 +70,17 @@ class DashboardHandler(BaseHandler):
 
     @cyclone.web.authenticated
     def get(self):
-        self.render("index.html")
+        group_count = self.nagapi.count_hostgroup()
+        host_count = self.nagapi.count_host()
+        service_count = self.nagapi.count_service()
+        self.render("index.html", 
+            group_count = self.nagapi.count_hostgroup(),
+            host_count = self.nagapi.count_host(),
+            service_count = self.nagapi.count_service(),
+            alert_count = self.mongodb.query_alert(None,None,None).count())
 
 
 permit.add_route(DashboardHandler, r"/", u"控制面板", MenuSys, order=1.0001)
-
-@permit.route(r"/dashboard/restart", u"重启服务", MenuSys, order=1.0002)
-class RestartHandler(BaseHandler):
-    @cyclone.web.authenticated
-    def post(self):
-        return self.render_json(**execute("supervisorctl restart all && supervisorctl status all"))
-
 
 @permit.route(r"/dashboard/update", u" 刷新服务", MenuSys, order=1.0002)
 class UpdateHandler(BaseHandler):

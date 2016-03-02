@@ -32,6 +32,7 @@ class SendMailHandler(BaseHandler):
         ctx = self.get_argument('content')
         logger.info("sendmail: %s %s %s"% (mailto, utils.safeunicode(topic), utils.safeunicode(ctx)))
         self.send_mail(mailto, topic, ctx).addCallbacks(logger.info,logger.error)
+        self.mongodb.add_mail_alert(mailto,ctx)
         self.render_json(code=0,msg="mail send done")
 
         

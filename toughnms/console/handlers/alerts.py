@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 #coding=utf-8
 import base
+from toughnms.console.handlers.base import MenuSys
 from toughlib.permit import permit
 from toughlib import utils
 
 
-@permit.route('/alerts')
+@permit.route(r"/alerts", u"告警管理", MenuSys, order=3.0011, is_menu=True)
 class AlertQueryHandler(base.BaseHandler):
     def get(self, template_variables={}):
         return self.post()
@@ -17,7 +18,7 @@ class AlertQueryHandler(base.BaseHandler):
         begin_time = utils.datetime2msec("%s 00:00:00"%begin_day)
         end_time = utils.datetime2msec("%s 23:59:59"%end_day)
         query = self.mongodb.query_alert(alert_type,begin_time,end_time)
-        page_data = self.get_page_data(query)
+        page_data = self.get_mdb_page_data(query)
         self.render("alerts.html",page_data=page_data,**self.get_params())
 
 

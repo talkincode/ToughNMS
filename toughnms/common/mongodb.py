@@ -3,6 +3,7 @@
 import datetime
 import time
 from pymongo import MongoClient
+from toughlib import utils
 import logging
 
 class MongoDB:
@@ -16,6 +17,17 @@ class MongoDB:
     def add_perfdata(self,host,data):
         db = self.mdb['nagios_perfdata']
         coll = db[str(host)]
+        coll.insert(data)
+
+    def add_mail_alert(self,mailto,content):
+        db = self.mdb['nagios_alerts']
+        coll = db['alerts']
+        data = dict(
+            alert_type = 'mail',
+            target = utils.safestr(mailto),
+            content = utils.safestr(content),
+            sendtime = time.time()   
+        ) 
         coll.insert(data)
 
     def default_start_end(self):
@@ -81,6 +93,7 @@ class MongoDB:
             param['alert_type'] = alert_type
 
         return alertdb.find(param)
+
 
 
 

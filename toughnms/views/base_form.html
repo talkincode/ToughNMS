@@ -10,6 +10,7 @@
             <div class="bar pull-right"><a href="javascript:history.go(-1);">返回</a></div>
         </div>
         <div class="box-body">
+         <div class="container">
             % if msg:
             <div class="alert alert-warning">${msg}</div>
             % endif
@@ -17,6 +18,7 @@
                 ${xsrf_form_html()}
                 ${form.render_css()}
         </form>
+    </div>
     </div>
 </div>
 </section>
