@@ -22,7 +22,8 @@ install()
     chmod +x /usr/local/bin/perfstore
 
     echo "test" > /var/toughnms/token
-    echo "" > /usr/local/nagios/etc/objects/hostgroups.cfg
+    mkdir -p /usr/local/nagios/etc/servers
+    /bin/cp /opt/toughnms/etc/hostgroups.cfg /usr/local/nagios/etc/objects/hostgroups.cfg
     /bin/cp /opt/toughnms/etc/nagios.cfg /usr/local/nagios/etc/nagios.cfg
     /bin/cp /opt/toughnms/etc/commands.cfg /usr/local/nagios/etc/objects/commands.cfg
     /bin/cp /opt/toughnms/etc/contacts.cfg /usr/local/nagios/etc/objects/contacts.cfg

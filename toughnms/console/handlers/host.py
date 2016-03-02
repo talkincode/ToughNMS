@@ -53,6 +53,17 @@ class HostAddHandler(base.BaseHandler):
             notifications_enabled = form.d.notifications_enabled
         )
 
+        sret = self.nagapi.add_service(
+            form.d.host_name,
+            "Ping",
+            "check_ping!100.0,20%!500.0,60%",
+            use = "generic-service", 
+            notifications_enabled = 1,
+            max_check_attempts = 5,
+            normal_check_interval = 5,
+            retry_check_interval = 1
+        )
+
         if ret.code > 0:
             self.render_error(msg=ret.msg)
         else: 
